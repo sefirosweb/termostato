@@ -1,0 +1,3 @@
+termostato_homepage:
+    path:     /
+    defaults: { _controller: TermostatoBundle:Default:index }
