@@ -10,4 +10,12 @@ class DefaultController extends Controller
     {
         return $this->render('TermostatoBundle:Default:index.html.twig');
     }
+
+    public function insertTempAction(){
+
+    }
+
+    public function insertHumAction(){
+
+    }
 }

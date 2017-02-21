@@ -1,3 +1,11 @@
 termostato_homepage:
     path:     /
     defaults: { _controller: TermostatoBundle:Default:index }
+
+termostato_insert_temp:
+    path:     /insert/temp/{temp}
+    defaults: { _controller: TermostatoBundle:Default:insertTemp }
+
+termostato_insert_hum:
+    path:     /insert/temp/{hum}
+    defaults: { _controller: TermostatoBundle:Default:insertHum }
