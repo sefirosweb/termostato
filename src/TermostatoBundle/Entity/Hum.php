@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="hum")
  * @ORM\Entity(repositoryClass="TermostatoBundle\Repository\HumRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class Hum
 {
@@ -21,13 +20,6 @@ class Hum
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
 
     /**
      * @var string
@@ -47,29 +39,7 @@ class Hum
         return $this->id;
     }
 
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Hum
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
 
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
 
     /**
      * Set hum
@@ -95,25 +65,6 @@ class Hum
         return $this->hum;
     }
 
-    /**
-     * Gets triggered only on insert
-
-     * @ORM\PrePersist
-     */
-    public function onPrePersist()
-    {
-        $this->date = new \DateTime("now");
-    }
-
-    /**
-     * Gets triggered every time on update
-
-     * @ORM\PreUpdate
-     */
-    public function onPreUpdate()
-    {
-        //$this->date = new \DateTime("now");
-    }
 
 
 }

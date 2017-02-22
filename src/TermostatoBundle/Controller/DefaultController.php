@@ -45,4 +45,11 @@ class DefaultController extends Controller
 
         return new Response('ID: ' . $hum->getId() . ' Hum: ' . $hum->getHum() . ' Date: ' . $hum->getDate()->format('Y-m-d H:i:s'));
     }
+
+    public function insertBothAction(Request $request)
+    {
+        $hum = $this->insertHumAction($request);
+        $temp = $this->insertTempAction($request);
+        return new Response($temp->getContent() . '<br>' . $hum->getContent());
+    }
 }

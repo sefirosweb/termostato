@@ -13,3 +13,10 @@ termostato_insert_hum:
     defaults: { _controller: TermostatoBundle:Default:insertHum }
     requirements:
           hum: ^-?[0-9]+([,\.][0-9]*)?$
+
+termostato_insert_both:
+    path:     /insert/temp/{temp}/hum/{hum}
+    defaults: { _controller: TermostatoBundle:Default:insertBoth }
+    requirements:
+          hum: ^-?[0-9]+([,\.][0-9]*)?$
+          temp: ^-?[0-9]+([,\.][0-9]*)?$

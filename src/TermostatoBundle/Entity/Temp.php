@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="temp")
  * @ORM\Entity(repositoryClass="TermostatoBundle\Repository\TempRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class Temp
 {
@@ -21,13 +20,6 @@ class Temp
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
 
     /**
      * @var string
@@ -47,29 +39,6 @@ class Temp
         return $this->id;
     }
 
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Temp
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
 
     /**
      * Set temp
@@ -95,22 +64,6 @@ class Temp
         return $this->temp;
     }
 
-    /**
-     * Gets triggered only on insert
-     * @ORM\PrePersist
-     */
-    public function onPrePersist()
-    {
-        $this->date = new \DateTime("now");
-    }
 
-    /**
-     * Gets triggered every time on update
-     * @ORM\PreUpdate
-     */
-    public function onPreUpdate()
-    {
-        //$this->date = new \DateTime("now");
-    }
 }
 
