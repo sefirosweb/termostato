@@ -1,5 +1,58 @@
 {% extends "TermostatoBundle::base.html.twig" %}
-
+    {% block stylesheets %}
+        {{ parent() }}
+        <style>
+            .chart {
+                width: 100%;
+                min-height: 500px;
+            }
+        </style>
+    {% endblock %}
 {% block body %}
-    Hello World21
+
+    <h1>Temperature</h1>
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="chart_div" class="chart"></div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            google.charts.load('current', {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Year', 'Humedity', 'Temperature'],
+                    ['2004', 78, 27],
+                    ['2005', 77, 30],
+                    ['2006', 77, 28],
+                    ['2007', 75, 29]
+                ]);
+
+                var options = {
+                    title: 'Temperaure and Humedity of CPD',
+                    hAxis: {title: 'Date & Time', titleTextStyle: {color: 'red'}}
+                };
+
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            $(window).resize(function () {
+                drawBasic();
+            });
+        });
+    </script>
 {% endblock %}
