@@ -2,6 +2,7 @@
 
 namespace TermostatoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Date
 {
+    /**
+     * @ORM\OneToOne(targetEntity="Temp", mappedBy="date")
+     * @ORM\OneToOne(targetEntity="Hum", mappedBy="date")
+     */
+    protected $temp;
+
     /**
      * @var int
      *
@@ -29,6 +36,10 @@ class Date
      */
     private $datetime;
 
+    public function __construct()
+    {
+        $this->temp = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -84,5 +95,52 @@ class Date
     {
         //$this->date = new \DateTime("now");
     }
-}
 
+    /**
+     * Add temp
+     *
+     * @param \TermostatoBundle\Entity\Temp $temp
+     *
+     * @return Date
+     */
+    public function addTemp(\TermostatoBundle\Entity\Temp $temp)
+    {
+        $this->temp[] = $temp;
+
+        return $this;
+    }
+
+    /**
+     * Remove temp
+     *
+     * @param \TermostatoBundle\Entity\Temp $temp
+     */
+    public function removeTemp(\TermostatoBundle\Entity\Temp $temp)
+    {
+        $this->temp->removeElement($temp);
+    }
+
+    /**
+     * Get temp
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTemp()
+    {
+        return $this->temp;
+    }
+
+    /**
+     * Set temp
+     *
+     * @param \TermostatoBundle\Entity\Temp $temp
+     *
+     * @return Date
+     */
+    public function setTemp(\TermostatoBundle\Entity\Temp $temp = null)
+    {
+        $this->temp = $temp;
+
+        return $this;
+    }
+}

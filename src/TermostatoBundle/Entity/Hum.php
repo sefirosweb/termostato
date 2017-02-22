@@ -2,6 +2,7 @@
 
 namespace TermostatoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Hum
 {
+
+    /**
+     * @ORM\OneToOne(targetEntity="Date", inversedBy="temp")
+     * @ORM\JoinColumn(name="fk_date_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $date;
+
     /**
      * @var int
      *
@@ -28,6 +36,11 @@ class Hum
      */
     private $hum;
 
+
+    public function __construct()
+    {
+        $this->date = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -68,4 +81,3 @@ class Hum
 
 
 }
-
