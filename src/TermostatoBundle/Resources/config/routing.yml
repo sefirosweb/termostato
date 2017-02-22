@@ -5,7 +5,11 @@ termostato_homepage:
 termostato_insert_temp:
     path:     /insert/temp/{temp}
     defaults: { _controller: TermostatoBundle:Default:insertTemp }
+    requirements:
+          temp: ^-?[0-9]+([,\.][0-9]*)?$
 
 termostato_insert_hum:
-    path:     /insert/temp/{hum}
+    path:     /insert/hum/{hum}
     defaults: { _controller: TermostatoBundle:Default:insertHum }
+    requirements:
+          hum: ^-?[0-9]+([,\.][0-9]*)?$

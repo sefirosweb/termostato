@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="hum")
  * @ORM\Entity(repositoryClass="TermostatoBundle\Repository\HumRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Hum
 {
@@ -24,7 +25,7 @@ class Hum
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date")
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
@@ -93,5 +94,27 @@ class Hum
     {
         return $this->hum;
     }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->date = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        //$this->date = new \DateTime("now");
+    }
+
+
 }
 
