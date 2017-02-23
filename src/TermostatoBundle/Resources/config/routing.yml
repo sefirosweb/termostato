@@ -1,4 +1,4 @@
-termostato_homepage:
+termostato_index:
     path:     /
     defaults: { _controller: TermostatoBundle:Default:index }
 

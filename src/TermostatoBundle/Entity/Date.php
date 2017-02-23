@@ -15,10 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Date
 {
     /**
-     * @ORM\OneToOne(targetEntity="Temp", mappedBy="date")
      * @ORM\OneToOne(targetEntity="Hum", mappedBy="date")
      */
-    protected $temp;
+    private $hum;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Temp", mappedBy="date")
+     */
+    private $temp;
 
     /**
      * @var int
@@ -36,10 +40,6 @@ class Date
      */
     private $datetime;
 
-    public function __construct()
-    {
-        $this->temp = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -97,37 +97,27 @@ class Date
     }
 
     /**
-     * Add temp
+     * Set hum
      *
-     * @param \TermostatoBundle\Entity\Temp $temp
+     * @param \TermostatoBundle\Entity\Temp $hum
      *
      * @return Date
      */
-    public function addTemp(\TermostatoBundle\Entity\Temp $temp)
+    public function setHum(\TermostatoBundle\Entity\Temp $hum = null)
     {
-        $this->temp[] = $temp;
+        $this->hum = $hum;
 
         return $this;
     }
 
     /**
-     * Remove temp
+     * Get hum
      *
-     * @param \TermostatoBundle\Entity\Temp $temp
+     * @return \TermostatoBundle\Entity\Temp
      */
-    public function removeTemp(\TermostatoBundle\Entity\Temp $temp)
+    public function getHum()
     {
-        $this->temp->removeElement($temp);
-    }
-
-    /**
-     * Get temp
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTemp()
-    {
-        return $this->temp;
+        return $this->hum;
     }
 
     /**
@@ -142,5 +132,15 @@ class Date
         $this->temp = $temp;
 
         return $this;
+    }
+
+    /**
+     * Get temp
+     *
+     * @return \TermostatoBundle\Entity\Temp
+     */
+    public function getTemp()
+    {
+        return $this->temp;
     }
 }

@@ -13,12 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Hum
 {
-
     /**
-     * @ORM\OneToOne(targetEntity="Date", inversedBy="temp")
+     * @ORM\OneToOne(targetEntity="Date", inversedBy="hum")
      * @ORM\JoinColumn(name="fk_date_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $date;
+    private $date;
 
     /**
      * @var int
@@ -53,7 +52,6 @@ class Hum
     }
 
 
-
     /**
      * Set hum
      *
@@ -79,5 +77,27 @@ class Hum
     }
 
 
+    /**
+     * Set date
+     *
+     * @param \TermostatoBundle\Entity\Date $date
+     *
+     * @return Hum
+     */
+    public function setDate(\TermostatoBundle\Entity\Date $date = null)
+    {
+        $this->date = $date;
 
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \TermostatoBundle\Entity\Date
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
 }

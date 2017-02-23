@@ -77,7 +77,6 @@ class Temp
     }
 
 
-
     /**
      * Set date
      *
