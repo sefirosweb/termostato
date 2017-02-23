@@ -2,6 +2,10 @@ termostato_index:
     path:     /
     defaults: { _controller: TermostatoBundle:Default:index }
 
+termostato_get_data:
+    path:     /getdata
+    defaults: { _controller: TermostatoBundle:Default:getAjaxData }
+
 termostato_insert_temp:
     path:     /insert/temp/{temp}
     defaults: { _controller: TermostatoBundle:Default:insertTemp }

@@ -28,17 +28,26 @@
     <script>
         $(document).ready(function () {
             google.charts.load('current', {packages: ['corechart']});
-            google.charts.setOnLoadCallback(drawBasic);
+            //google.charts.setOnLoadCallback(drawBasic);
 
-            function drawBasic() {
+            function drawBasic(dataJ) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'date');
+                data.addColumn('number', 'Temperature');
+                data.addColumn('number', 'Humedity');
+                //data.addRow(['2015', '25', '40']);
 
-                var data = google.visualization.arrayToDataTable([
-                    ['Year', 'Humedity', 'Temperature'],
-                    ['2004', 78, 27],
-                    ['2005', 77, 30],
-                    ['2006', 77, 28],
-                    ['2007', 75, 29]
-                ]);
+                for (var i = 0; i < dataJ.length; i++) {
+                    //data.addRow([dataJ[i]['date'], dataJ[i]['temp'], dataJ[i]['hum']]);
+                }
+                /*var data = google.visualization.arrayToDataTable([
+                 ['Year', 'Humedity', 'Temperature'],
+                 ['2004', 78, 27],
+                 ['2005', 77, 30],
+                 ['2006', 77, 28],
+                 ['2007', 75, 29]
+                 ]);*/
+
 
                 var options = {
                     title: 'Temperaure and Humedity of CPD',
@@ -53,6 +62,15 @@
             $(window).resize(function () {
                 drawBasic();
             });
+
+
+            $.ajax({
+                url: "app_dev.php/getdata"
+            }).done(function (data) {
+                console.log(data);
+                drawBasic(data);
+            });
+
         });
     </script>
 {% endblock %}

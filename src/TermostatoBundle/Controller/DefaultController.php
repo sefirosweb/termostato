@@ -5,31 +5,57 @@ namespace TermostatoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use TermostatoBundle\Entity\Date;
 use TermostatoBundle\Entity\Hum;
 use TermostatoBundle\Entity\Temp;
-use Doctrine\ORM\Query\Expr\Join;
 
 class DefaultController extends Controller
 {
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-
-
         /*$qb = $em->createQueryBuilder()
             ->select('d')
             ->from('TermostatoBundle:Date', 'd')
             ->getQuery()
             ->getResult();*/
 
-        $data = $em->getRepository('TermostatoBundle:Hum')->findAll();
+        return $this->render('TermostatoBundle:Default:index.html.twig');
+    }
 
+    private function getData()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $dataRaws = $em->getRepository('TermostatoBundle:Date')->findAll();
+        foreach ($dataRaws as $dataRaw) {
+            $data[] = array(
+                'date' => $dataRaw->getDatetime()->format('Y-m-d H:i:s'),
+                'temp' => $dataRaw->getTemp()->getTemp(),
+                'hum' => $dataRaw->getHum()->getHum()
+            );
+        }
+        return $data;
+    }
 
+    public function getAjaxDataAction(){
+        $normalizer = new ObjectNormalizer(null);
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $encoder = new JsonEncoder();
+        $serializer = new Serializer(array($normalizer), array($encoder));
 
+        $data = $this->getData();
+        return $this->responeJSON($data);
+    }
 
-        return $this->render('TermostatoBundle:Default:index.html.twig', array('data'=>$data));
+    private function responeJSON($data)
+    {
+        $response = new Response(json_encode($data));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
 
