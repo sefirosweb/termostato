@@ -52,7 +52,7 @@
             function getData() {
                 $.ajax({
                     type: "GET",
-                    url: "app_dev.php/getdata",
+                    url: "{{ url('termostato_get_data') }}",
                     dataType: "json",
                     success: function (data) {
                         console.log("Get new data");
