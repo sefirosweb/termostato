@@ -17,9 +17,6 @@
         </div>
     </div>
 
-
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -27,27 +24,15 @@
     <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
     <script>
         $(document).ready(function () {
+
+            var dataChartJSON = '{{(dataChart|json_encode|raw)}}';
+            var dataChart = JSON.parse(dataChartJSON);
+
             google.charts.load('current', {packages: ['corechart']});
-            //google.charts.setOnLoadCallback(drawBasic);
+            google.charts.setOnLoadCallback(drawBasic);
 
-            function drawBasic(dataJ) {
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'date');
-                data.addColumn('number', 'Temperature');
-                data.addColumn('number', 'Humedity');
-                //data.addRow(['2015', '25', '40']);
-
-                for (var i = 0; i < dataJ.length; i++) {
-                    //data.addRow([dataJ[i]['date'], dataJ[i]['temp'], dataJ[i]['hum']]);
-                }
-                /*var data = google.visualization.arrayToDataTable([
-                 ['Year', 'Humedity', 'Temperature'],
-                 ['2004', 78, 27],
-                 ['2005', 77, 30],
-                 ['2006', 77, 28],
-                 ['2007', 75, 29]
-                 ]);*/
-
+            function drawBasic() {
+                var data = new google.visualization.DataTable(dataChart);
 
                 var options = {
                     title: 'Temperaure and Humedity of CPD',
@@ -64,12 +49,26 @@
             });
 
 
-            $.ajax({
-                url: "app_dev.php/getdata"
-            }).done(function (data) {
-                console.log(data);
-                drawBasic(data);
-            });
+            function getData() {
+                $.ajax({
+                    type: "GET",
+                    url: "app_dev.php/getdata",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log("Get new data");
+                        dataChart = data;
+                        console.log(dataChart);
+                        drawBasic();
+                    },
+                    error: function () {
+                        console.log("Ajax Error");
+                    }
+                });
+            }
+
+            setInterval(function() {
+                getData();
+            }, 10000);
 
         });
     </script>

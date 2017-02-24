@@ -22,7 +22,7 @@ class DefaultController extends Controller
             ->getQuery()
             ->getResult();*/
 
-        return $this->render('TermostatoBundle:Default:index.html.twig');
+        return $this->render('TermostatoBundle:Default:index.html.twig',array('dataChart' => $this->getGoogleChartInfo()));
     }
 
     private function getData()
@@ -39,16 +39,40 @@ class DefaultController extends Controller
         return $data;
     }
 
-    public function getAjaxDataAction(){
-        $normalizer = new ObjectNormalizer(null);
+    private function getGoogleChartInfo()
+    {
+        $datas = $this->getData();
+
+        //Google char table array
+        $table = array();
+        $table['cols'] = array(
+            array('id' => "", 'label' => 'Date', 'pattern' => "", 'type' => 'string'),
+            array('id' => "", 'label' => 'Temp', 'pattern' => "", 'type' => 'number'),
+            array('id' => "", 'label' => 'Hum', 'pattern' => "", 'type' => 'number')
+        );
+        $rows = array();
+        foreach ($datas as $data) {
+            $temp = array();
+            $temp[] = array('v' => $data['date'], 'f' => NULL);
+            $temp[] = array('v' => $data['temp'], 'f' => NULL);
+            $temp[] = array('v' => $data['hum'], 'f' => NULL);
+            $rows[] = array('c' => $temp);
+        }
+        $table['rows'] = $rows;
+
+        return $table;
+    }
+
+    public function getAjaxDataAction()
+    {
+        /*$normalizer = new ObjectNormalizer(null);
         $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getId();
         });
         $encoder = new JsonEncoder();
-        $serializer = new Serializer(array($normalizer), array($encoder));
+        $serializer = new Serializer(array($normalizer), array($encoder));*/
 
-        $data = $this->getData();
-        return $this->responeJSON($data);
+        return $this->responeJSON($this->getGoogleChartInfo());
     }
 
     private function responeJSON($data)
