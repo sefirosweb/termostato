@@ -44,8 +44,8 @@ class DefaultController extends Controller
         $table = array();
         $table['cols'] = array(
             array('id' => "", 'label' => 'Date', 'pattern' => "", 'type' => 'string'),
-            array('id' => "", 'label' => 'Temp', 'pattern' => "", 'type' => 'number'),
-            array('id' => "", 'label' => 'Hum', 'pattern' => "", 'type' => 'number')
+            array('id' => "", 'label' => 'Temperature', 'pattern' => "", 'type' => 'number'),
+            array('id' => "", 'label' => 'Humedity', 'pattern' => "", 'type' => 'number')
         );
         $rows = array();
         foreach ($datas as $data) {
