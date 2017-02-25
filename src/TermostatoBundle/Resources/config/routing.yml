@@ -2,6 +2,14 @@ termostato_index:
     path:     /
     defaults: { _controller: TermostatoBundle:Default:index }
 
+termostato_sendemail:
+    path:     /sendemail
+    defaults: { _controller: TermostatoBundle:Default:sendEmail }
+
+termostato_sendemailview:
+    path:     /sendemail/view
+    defaults: { _controller: TermostatoBundle:Default:sendEmailView }
+
 termostato_get_data:
     path:     /getdata
     defaults: { _controller: TermostatoBundle:Default:getAjaxData }

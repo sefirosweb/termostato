@@ -13,12 +13,12 @@
     <h1>Temperature</h1>
     <div class="row">
         <div class="col-sm-12">
-        <form class="form-inline">
-            <div class="form-group">
-                <label>Limit</label>
-                <input type="text" class="form-control" id="limit" placeholder="Number" value="100">
-            </div>
-        </form>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>Limit</label>
+                    <input type="text" class="form-control" id="limit" placeholder="Number" value="100">
+                </div>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -67,7 +67,7 @@
                     type: "GET",
                     url: "{{ url('termostato_get_data') }}",
                     data: {
-                        'limit' : limit
+                        'limit': limit
                     },
                     dataType: "json",
                     success: function (data) {
@@ -86,12 +86,12 @@
                 getData();
             }, 10000);
 
-            $('#limit').blur(function(){
-               if((isNormalInteger($('#limit').val()))){
-                   getData();
-               }else{
-                   $('#limit').val('100');
-               }
+            $('#limit').blur(function () {
+                if ((isNormalInteger($('#limit').val()))) {
+                    getData();
+                } else {
+                    $('#limit').val('100');
+                }
 
             });
 

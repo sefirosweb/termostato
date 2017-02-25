@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div style="width: 100%;">
+    <div style="width: 60%; margin: 0 auto">
+        <h1>Alerta en el CPD</h1>
+        <table style="width: 100%; border-collapse: collapse; border:  2px solid #1b70ff;">
+            <tr>
+                <td style="padding: 5px">Fecha</td>
+                <td style="padding: 5px">Humedad</td>
+                <td style="padding: 5px">Temperatura</td>
+            </tr>
+
+            {% for data in datas %}
+                <tr>
+                    {% for val in data %}
+                        <td style="padding: 5px">{{ val }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -22,7 +22,7 @@ class DefaultController extends Controller
         $dataRaws = $em->createQueryBuilder()
             ->select('d')
             ->from('TermostatoBundle:Date', 'd')
-            ->orderBy('d.datetime','DESC')
+            ->orderBy('d.datetime', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
@@ -60,6 +60,31 @@ class DefaultController extends Controller
         return $table;
     }
 
+    public function sendEmailAction(Request $request)
+    {
+        if (!($request->getClientIp() == '127.0.0.1' || $request->getClientIp() == '::1')) {
+            return new Response('You no have authorization');
+        }
+        $message = \Swift_Message::newInstance()
+            ->setSubject("Temperatura del CPD")
+            ->setFrom("itteam@westwing.es")
+            ->setTo("it.contact@westwing.es")
+            ->setContentType("text/html")
+            ->setBody(
+                $this->renderView(
+                    'TermostatoBundle:Default:email.html.twig',
+                    array('datas' => $this->getData(20))
+                )
+            );
+        $this->get('mailer')->send($message);
+        return new Response("Sended email");
+    }
+
+    public function sendEmailViewAction(Request $request)
+    {
+        return $this->render('TermostatoBundle:Default:email.html.twig', array('datas' => $this->getData(20)));
+    }
+
     public function getAjaxDataAction()
     {
         /*$normalizer = new ObjectNormalizer(null);
@@ -81,32 +106,32 @@ class DefaultController extends Controller
 
     public function insertBothAction(Request $request)
     {
-        if ($request->getClientIp() == '127.0.0.1' || $request->getClientIp() == '::1' ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $em->getConnection()->beginTransaction(); // suspend auto-commit
-
-            $date = new Date();
-            $em->persist($date);
-            $em->flush();
-
-            $temp = new Temp();
-            $temp->setTemp($request->get('temp'));
-            $temp->setDate($date);
-            $em->persist($temp);
-            $em->flush();
-
-            $hum = new Hum();
-            $hum->setHum($request->get('hum'));
-            $hum->setDate($date);
-            $em->persist($hum);
-            $em->flush();
-
-
-            $em->getConnection()->commit();
-            return new Response('Temp: ' . $temp->getTemp() . '<br>Hum: ' . $hum->getHum() . '<br>Date: ' . $temp->getDate()->getDatetime()->format('Y-m-d H:i:s'));
-        }else{
+        if (!($request->getClientIp() == '127.0.0.1' || $request->getClientIp() == '::1')) {
             return new Response('You no have authorization');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction(); // suspend auto-commit
+
+        $date = new Date();
+        $em->persist($date);
+        $em->flush();
+
+        $temp = new Temp();
+        $temp->setTemp($request->get('temp'));
+        $temp->setDate($date);
+        $em->persist($temp);
+        $em->flush();
+
+        $hum = new Hum();
+        $hum->setHum($request->get('hum'));
+        $hum->setDate($date);
+        $em->persist($hum);
+        $em->flush();
+
+
+        $em->getConnection()->commit();
+        return new Response('Temp: ' . $temp->getTemp() . '<br>Hum: ' . $hum->getHum() . '<br>Date: ' . $temp->getDate()->getDatetime()->format('Y-m-d H:i:s'));
+
     }
 }
