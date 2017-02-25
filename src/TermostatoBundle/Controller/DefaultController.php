@@ -16,19 +16,19 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        /*$qb = $em->createQueryBuilder()
-            ->select('d')
-            ->from('TermostatoBundle:Date', 'd')
-            ->getQuery()
-            ->getResult();*/
-
-        return $this->render('TermostatoBundle:Default:index.html.twig',array('dataChart' => $this->getGoogleChartInfo()));
+        return $this->render('TermostatoBundle:Default:index.html.twig', array('dataChart' => $this->getGoogleChartInfo()));
     }
 
     private function getData()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $dataRaws = $em->getRepository('TermostatoBundle:Date')->findAll();
+        $dataRaws = $em->createQueryBuilder()
+            ->select('d')
+            ->from('TermostatoBundle:Date', 'd')
+            ->orderBy('d.datetime','DESC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
         foreach ($dataRaws as $dataRaw) {
             $data[] = array(
                 'date' => $dataRaw->getDatetime()->format('Y-m-d H:i:s'),
@@ -85,27 +85,32 @@ class DefaultController extends Controller
 
     public function insertBothAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction(); // suspend auto-commit
+        if ($request->getClientIp() == '127.0.0.1' || $request->getClientIp() == '::1' ) {
 
-        $date = new Date();
-        $em->persist($date);
-        $em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->getConnection()->beginTransaction(); // suspend auto-commit
 
-        $temp = new Temp();
-        $temp->setTemp($request->get('temp'));
-        $temp->setDate($date);
-        $em->persist($temp);
-        $em->flush();
+            $date = new Date();
+            $em->persist($date);
+            $em->flush();
 
-        $hum = new Hum();
-        $hum->setHum($request->get('hum'));
-        $hum->setDate($date);
-        $em->persist($hum);
-        $em->flush();
+            $temp = new Temp();
+            $temp->setTemp($request->get('temp'));
+            $temp->setDate($date);
+            $em->persist($temp);
+            $em->flush();
+
+            $hum = new Hum();
+            $hum->setHum($request->get('hum'));
+            $hum->setDate($date);
+            $em->persist($hum);
+            $em->flush();
 
 
-        $em->getConnection()->commit();
-        return new Response('Temp: ' . $temp->getTemp() . '<br>Hum: ' . $hum->getHum() . '<br>Date: ' . $temp->getDate()->getDatetime()->format('Y-m-d H:i:s'));
+            $em->getConnection()->commit();
+            return new Response('Temp: ' . $temp->getTemp() . '<br>Hum: ' . $hum->getHum() . '<br>Date: ' . $temp->getDate()->getDatetime()->format('Y-m-d H:i:s'));
+        }else{
+            return new Response('You no have authorization');
+        }
     }
 }
