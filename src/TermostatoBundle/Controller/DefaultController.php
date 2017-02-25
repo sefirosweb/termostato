@@ -16,14 +16,14 @@ class DefaultController extends Controller
         return $this->render('TermostatoBundle:Default:index.html.twig', array('dataChart' => $this->getGoogleChartInfo()));
     }
 
-    private function getData()
+    private function getData($limit = 100)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $dataRaws = $em->createQueryBuilder()
             ->select('d')
             ->from('TermostatoBundle:Date', 'd')
             ->orderBy('d.datetime','DESC')
-            ->setMaxResults(100)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
         foreach ($dataRaws as $dataRaw) {
@@ -36,9 +36,9 @@ class DefaultController extends Controller
         return $data;
     }
 
-    private function getGoogleChartInfo()
+    private function getGoogleChartInfo($limit = 100)
     {
-        $datas = $this->getData();
+        $datas = $this->getData($limit);
 
         //Google char table array
         $table = array();
@@ -69,7 +69,7 @@ class DefaultController extends Controller
         $encoder = new JsonEncoder();
         $serializer = new Serializer(array($normalizer), array($encoder));*/
 
-        return $this->responeJSON($this->getGoogleChartInfo());
+        return $this->responeJSON($this->getGoogleChartInfo($_GET['limit']));
     }
 
     private function responeJSON($data)
