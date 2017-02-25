@@ -32,7 +32,7 @@ def main():
 
     if alarmTemp == 1:
 	  alarm.start()
-	  timer = timer +1
+	  timer = timer + 1
 	  if timer > 10:
 	    thread.start_new_thread(sendemail, () )
 	    timer = 0
