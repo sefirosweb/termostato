@@ -44,6 +44,7 @@ def addInfo(humidity, temperature):
    os.system("/usr/bin/curl -k -s http://127.0.0.1/insert/temp/{0:0.1f}/hum/{1:0.1f} > /dev/null".format(temperature, humidity))
 
 def sendemail():
+   sleep(10)
    os.system("/usr/bin/curl -k -s http://127.0.0.1/sendemail > /dev/null")
 
 #thread.start_new_thread(alarm.start, () )
