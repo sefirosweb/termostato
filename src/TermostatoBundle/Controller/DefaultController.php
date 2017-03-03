@@ -66,7 +66,7 @@ class DefaultController extends Controller
             return new Response('You no have authorization');
         }
         $message = \Swift_Message::newInstance()
-            ->setSubject("Temperatura del CPD")
+            ->setSubject("Alerta temperatura del CPD")
             ->setFrom("itteam@westwing.es")
             ->setTo("it.contact@westwing.es")
             ->setContentType("text/html")

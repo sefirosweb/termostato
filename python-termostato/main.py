@@ -8,31 +8,34 @@ import alarm
 import os
 
 timer = 10
+maxtemp = 25
+maxhumidity = 80
+humidity = 0
+temperature = 0
 
 def main():
 
-  maxtemp = 25
-  maxhumidity = 80
+  global timer
+  global temperature
+  global humidity
+  global maxtemp
+  global maxhumidity
+
+  thread.start_new_thread(checktemp, () )
+  thread.start_new_thread(addInfo, () )
 
   while True:
     alarmTemp = 0
-    humidity, temperature = Adafruit_DHT.read_retry(11, 4)
-    print 'Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temperature, humidity)
-    lcd.show('Temperat: {0:0.1f} C'.format(temperature),'Humidity: {0:0.1f} %'.format(humidity))
-    thread.start_new_thread(addInfo, (humidity, temperature) )
 
     if humidity > maxhumidity:
-	  print("Humedad mas de {0:0.1f}%".format(maxhumidity))
 	  alarmTemp = 1
 
-
     if temperature > maxtemp:
-	  print("Temperatura mas de {0:0.1f} C".format(maxtemp))
 	  alarmTemp = 1
 
     if alarmTemp == 1:
 	  alarm.start()
-	  timer = timer + 1
+	  timer = ( timer + 1 )
 	  if timer > 10:
 	    thread.start_new_thread(sendemail, () )
 	    timer = 0
@@ -40,16 +43,27 @@ def main():
     time.sleep(10)
 
 
-def addInfo(humidity, temperature):
-   os.system("/usr/bin/curl -k -s http://127.0.0.1/insert/temp/{0:0.1f}/hum/{1:0.1f} > /dev/null".format(temperature, humidity))
+def addInfo():
+    global temperature
+    global humidity
+    while True:
+        time.sleep(10)
+        os.system("/usr/bin/curl -k -s http://127.0.0.1/insert/temp/{0:0.1f}/hum/{1:0.1f} > /dev/null".format(temperature, humidity))
 
 def sendemail():
-   sleep(10)
+   time.sleep(10)
    os.system("/usr/bin/curl -k -s http://127.0.0.1/sendemail > /dev/null")
 
-#thread.start_new_thread(alarm.start, () )
+def checktemp():
+    while True:
+        global humidity
+        global temperature
+        humidity, temperature = Adafruit_DHT.read_retry(11, 4)
+        print 'Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temperature, humidity)
+        lcd.show('Temperat: {0:0.1f} C'.format(temperature),'Humidity: {0:0.1f} %'.format(humidity))
+        time.sleep(0.5)
 
-
+#Start Main
 try:
 	main()
 except KeyboardInterrupt:
