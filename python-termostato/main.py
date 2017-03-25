@@ -8,7 +8,7 @@ import alarm
 import os
 
 timer = 10
-maxtemp = 25
+maxtemp = 23
 maxhumidity = 80
 humidity = 0
 temperature = 0
@@ -25,18 +25,23 @@ def main():
   thread.start_new_thread(addInfo, () )
 
   while True:
+    print("Start While")
     alarmTemp = 0
 
     if humidity > maxhumidity:
 	  alarmTemp = 1
+          print 'Alarma Humedad: {0:0.1f} %'.format(humidity)
 
     if temperature > maxtemp:
 	  alarmTemp = 1
+          print 'Alarma Temperatura: {0:0.1f} C'.format(temperature)
 
     if alarmTemp == 1:
-	  alarm.start()
+	  print("Alarma auditiva")
+  	  alarm.start()
 	  timer = ( timer + 1 )
 	  if timer > 10:
+	    print("Enviando mail")
 	    thread.start_new_thread(sendemail, () )
 	    timer = 0
 
